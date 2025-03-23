@@ -11,11 +11,11 @@ const register = async (req, res) => {
     age,
     email,
     password,
-    phoneNumber,
+    numberPhone,
     country,
     city,
     address,
-    faceDescription,
+    faceDescriptor,
     faceImage,
   } = req.body;
 
@@ -23,7 +23,7 @@ const register = async (req, res) => {
     const userFoundEmail = await user.findOne({ email });
     const userFoundUserName = await user.findOne({ userName });
     const userFoundIdentityDocument = await user.findOne({ identityDocument });
-    const userFoundPhoneNumber = await user.findOne({ phoneNumber });
+    const userFoundNumberPhone = await user.findOne({numberPhone });
 
     if (userFoundEmail)
       return res.status(400).json({ message: "Email already exists" });
@@ -36,7 +36,7 @@ const register = async (req, res) => {
         .status(400)
         .json({ message: "Identity Document already exists" });
 
-    if (userFoundPhoneNumber)
+    if (userFoundNumberPhone)
       return res.status(400).json({ message: "Phone Number already exists" });
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -49,11 +49,11 @@ const register = async (req, res) => {
       age,
       email,
       password: passwordHash,
-      phoneNumber,
+      numberPhone,
       country,
       city,
       address,
-      faceDescription,
+      faceDescriptor,
       faceImage,
     });
 
@@ -67,11 +67,11 @@ const register = async (req, res) => {
       identityDocument: userSaved.identityDocument,
       age: userSaved.age,
       email: userSaved.email,
-      phoneNumber: userSaved.phoneNumber,
+      numberPhone: userSaved.numberPhone,
       country: userSaved.country,
       city: userSaved.city,
       address: userSaved.address,
-      faceDescription: userSaved.faceDescription,
+      faceDescriptor: userSaved.faceDescriptor,
       faceImage: userSaved.faceImage,
     });
   } catch (error) {

@@ -88,7 +88,7 @@ const userSchema = new mongoose.Schema({
    * @type {Array<Number>}
    * @optional
    */
-  faceDescriptor: { type: [Number], required: false },
+  faceDescriptor: { type: [Number], required: true},
 
   /**
    * Imagen del rostro del usuario, almacenada en Base64 o como URL.

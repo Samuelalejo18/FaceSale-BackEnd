@@ -11,6 +11,6 @@ const {
 } = require("../controllers/auth.controller");
 
 
-router.post("./register", register);
+router.post("/register", register);
 
 module.exports = router;

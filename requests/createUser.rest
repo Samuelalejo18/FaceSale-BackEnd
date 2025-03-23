@@ -1,0 +1,18 @@
+POST http://localhost:4000/api/register
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Pérez",
+  "userName": "juan_perez123",
+  "identityDocument": 123456789,
+  "age": 30,
+  "email": "juan.perez@example.com",
+  "password": "SecurePassword123",
+  "numberPhone": 30012345672,
+  "country": "Colombia",
+  "city": "Bogotá",
+  "address": "Calle 123 #45-67",
+  "faceDescriptor": [0.12, 0.34, 0.56, 0.78, 0.91],
+  "faceImage": "data:image/png;base64,iVBORw..."
+}
