@@ -16,6 +16,9 @@ const cors = require("cors");
 
 //conecta con las rutas
 
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+
 //configuraciones de express
 // Habilita CORS (Cross-Origin Resource Sharing) para permitir
 // peticiones desde el frontend alojado en http://localhost:8000
@@ -35,7 +38,8 @@ server.use(express.json());
 server.use(cookieParser());
 
 // Rutas
-server.use("/api");
+server.use("/api", authRoutes);
+server.use("/api", userRoutes);
 
 require("./db.js");
 module.exports = server;
