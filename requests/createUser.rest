@@ -1,3 +1,15 @@
+
+//traer todos los usuarios
+GET http://localhost:4000/api/getUser
+Content-Type: application/json
+
+//traer un usuario por id
+GET http://localhost:4000/api/getUser/67e09aa1419a57d2f90f9275
+
+//Actualizar un usuario
+
+
+//Registrar un usuario
 POST http://localhost:4000/api/register
 Content-Type: application/json
 
