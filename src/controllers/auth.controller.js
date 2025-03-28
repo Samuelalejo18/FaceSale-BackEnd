@@ -2,6 +2,10 @@ const user = require("../models/user.js");
 
 const bcrypt = require("bcrypt");
 
+//Importar token
+
+const { createAccessToken } = require("../controllers/user.controller.js");
+
 const register = async (req, res) => {
   const {
     name,
@@ -23,7 +27,7 @@ const register = async (req, res) => {
     const userFoundEmail = await user.findOne({ email });
     const userFoundUserName = await user.findOne({ userName });
     const userFoundIdentityDocument = await user.findOne({ identityDocument });
-    const userFoundNumberPhone = await user.findOne({numberPhone });
+    const userFoundNumberPhone = await user.findOne({ numberPhone });
 
     if (userFoundEmail)
       return res.status(400).json({ message: "Email already exists" });
@@ -59,6 +63,11 @@ const register = async (req, res) => {
 
     const userSaved = await newUser.save();
 
+    //importar token
+    const token = await createAccessToken({ id: userSaved._id });
+
+    res.cookie("token", token);
+
     res.json({
       id: userSaved._id,
       name: userSaved.name,
@@ -80,9 +89,52 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {};
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-const logout = (req, res) => {};
+    //buscar si el email/usuario existe
+    const userFound = await user.findOne({ email });
+
+    if (!userFound)
+      return res.status(400).json({ message: ["❌ The email does not exist"] });
+
+    //comparar la contraseña
+
+    const matchedPassword = await bcrypt.compare(password, userFound.password);
+    if (!matchedPassword) {
+      return res
+        .status(400)
+        .json({ message: [" ❌ The password is incorrect"] });
+    }
+
+    //Crear y devolver un token
+    const token = await createAccessToken({ id: userFound._id });
+
+    res.json({
+      id: userFound._id,
+      name: userFound.name,
+      lastName: userFound.lastName,
+      userName: userFound.userName,
+      identityDocument: userFound.identityDocument,
+      age: userFound.age,
+      email: userFound.email,
+      numberPhone: userFound.numberPhone,
+      country: userFound.country,
+      city: userFound.city,
+      address: userFound.address,
+      faceDescriptor: userFound.faceDescriptor,
+      faceImage: userFound.faceImage,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const logout = (req, res) => {
+  res.cookie("token", "", { expires: new Date(0) });
+  return res.sendStatus(200);
+};
 
 const profile = async (req, res) => {};
 
