@@ -80,12 +80,5 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {};
 
-const logout = (req, res) => {};
-
-const profile = async (req, res) => {};
-
-const virifyToken = async (req, res) => {};
-
-module.exports = { register, login, logout, profile, virifyToken };
+module.exports = { register };

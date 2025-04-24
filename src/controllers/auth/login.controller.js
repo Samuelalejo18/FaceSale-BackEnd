@@ -1,62 +1,119 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bycryptjs');
-const User = require('../../models/user');
+const User = require("../../models/user.js");
+const bcrypt = require("bcrypt");
 
+//Importar token
 
-exports.login = async (req, res) => {
+const { createAccessToken } = require("../../libs/jwt.js");
+//Importar la libreria de jsonwebtoken
 
-    try {
+const jwt = require("jsonwebtoken");
 
-        const {email, password} = req.body;
+require("dotenv").config();
+const { SECRET } = process.env;
 
-        // The first step is to check if the user exists
-        const user = await User.findOne({ email });
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-        // If the user doesn´t exist return an error status
-        if (!user) {
+    //buscar si el correo existe
 
-            return res.status(404).json({ message: "User not found"});
+    const userFoundEmail = await User.findOne({ email });
+    if (!userFoundEmail) {
+      return res.status(400).json({ message: "El correo no existe ❌" });
+    }
 
-        }
+    //Comparar la contraseña
 
-        // If the user exists
+    const matchedPassword = await bcrypt.compare(
+      password,
+      userFoundEmail.password
+    );
 
-        // Verify the password (Compared the stored password with the password enteredby the user) this is a bool value
-        const passwordValid = await bcrypt.compare(password, user.password);
+    if (!matchedPassword) {
+      return res.status(400).json({ message: "Contraseña incorrecta ❌" });
+    }
 
-        if (!passwordValid) {
+    //Crear token y dovolver un token
+    const token = await createAccessToken({ id: userFoundEmail._id });
+    res.cookie("token", token);
 
-            return res.status(401).json({ message: "Invalid password"});
-
-        }
-
-        // If the password is valid
-
-        // Generate the JWT Token
-        const token = jwt.sign(
-
-            { id: user._id , email: user.email },
-
-            process.env.JWT_SECRET,
-
-            // JWT Valid Time
-            { expiresIn: '1h' }
-
-        );
-
-        // Return the token and the user object
-        res.json({ token,  user: {
-
-            id : user._id, email: user.email, name: user.name
-
-        }});
-
-
-    } catch (error) {
-
-        res.status(500).json({ message: "Server error" });
-
-    };
+    res.json({
+        id: userFoundEmail._id,
+        name: userFoundEmail.name,
+        lastName: userFoundEmail.lastName,
+        userName: userFoundEmail.userName,
+        identityDocument: userFoundEmail.identityDocument,
+        age: userFoundEmail.age,
+        email: userFoundEmail.email,
+        numberPhone: userFoundEmail.numberPhone,
+        country: userFoundEmail.country,
+        city: userFoundEmail.city,
+        address: userFoundEmail.address,
+        faceDescriptor: userFoundEmail.faceDescriptor,
+        faceImage: userFoundEmail.faceImage,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
-// Made by Julian :))))))))))))))))))))))))))))))))))))))))))))))))))
+//Deslogearse o cerrar el token
+
+const logout = (req, res) => {
+  res.cookie("token", "", { expires: new Date(0) });
+  return res.sendStatus(200);
+};
+
+//mirar perfil
+
+const profile = async (req, res) => {
+  const userFound = await User.findById(req.user.id);
+  if (!userFound) {
+    return res.status(400).json({ message: "Usuario no encontrado" });
+  }
+
+  res.json({
+    id: userFound._id,
+      name: userFound.name,
+      lastName: userFound.lastName,
+      userName: userFound.userName,
+      identityDocument: userFound.identityDocument,
+      age: userFound.age,
+      email: userFound.email,
+      numberPhone: userFound.numberPhone,
+      country: userFound.country,
+      city: userFound.city,
+      address: userFound.address,
+      faceDescriptor: userFound.faceDescriptor,
+      faceImage: userFound.faceImage,
+  });
+};
+
+const verifyToken = async (req, res) => {
+  const { token } = req.cookies;
+  if (!token) return res.status(400).json({ message: "No autirizado" });
+  jwt.verify(token, SECRET, async (err, user) => {
+    if (err) return res.status(401).json({ message: "No autirizado" });
+    const userFound = await User.findById(user.id);
+
+    if (!userFound) return res.status(401).json({ message: "No autirizado" });
+
+    res.json({
+        id: userFound._id,
+        name: userFound.name,
+        lastName: userFound.lastName,
+        userName: userFound.userName,
+        identityDocument: userFound.identityDocument,
+        age: userFound.age,
+        email: userFound.email,
+        numberPhone: userFound.numberPhone,
+        country: userFound.country,
+        city: userFound.city,
+        address: userFound.address,
+        faceDescriptor: userFound.faceDescriptor,
+        faceImage: userFound.faceImage,
+    });
+  });
+};
+
+module.exports = { login, logout, profile, verifyToken };

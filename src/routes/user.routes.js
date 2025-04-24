@@ -1,16 +1,32 @@
-
 const { Router } = require("express");
-const routerUser = Router();
+
+const routerCrudUser = Router();
+const { validateSchema } = require("../middlewares/validator.middleware.js");
+const { registerSchema } = require("../schema/userSchemaZod.js");
+
 const {
-  getUser,
+  getUsers,
   getUserByID,
+} = require("../controllers/userCRUD/getUsers.Controller.js");
+
+const {
   updateUser,
+} = require("../controllers/userCRUD/updateUser.Controller.js");
+
+const {
   deleteUser,
-} = require("../controllers/user.controller.js");
+} = require("../controllers/userCRUD/deleteUser.controller.js");
 
-routerUser.get("/getUser", getUser);
-routerUser.get("/getUser/:id", getUserByID);
-routerUser.put("/updateUser/:id", updateUser);
-routerUser.delete("/deleteUser/:id", deleteUser);
+routerCrudUser.get("/getUsers", getUsers);
 
-module.exports = routerUser;
+routerCrudUser.get("/getUserByID/:id", getUserByID);
+
+routerCrudUser.put(
+  "/updateUser/:id",
+  validateSchema(registerSchema),
+  updateUser
+);
+
+routerCrudUser.delete("/deleteUser/:id", deleteUser);
+
+module.exports = routerCrudUser;

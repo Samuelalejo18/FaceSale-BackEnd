@@ -18,9 +18,18 @@ const validateSchema = (schema) => {
     next();
   } catch (error) {
     // Si la validación falla, captura el error y maneja la respuesta.
-    console.log(error);
-    // Muestra en la consola el primer mensaje de error para facilitar la depuración.
 
+    // Muestra en la consola el primer mensaje de error para facilitar la depuración.
+    if (error && Array.isArray(error.errors)) {
+      return res.status(400).json({
+        errors: error.errors.map((e) => e.message),
+      });
+    } else {
+      console.error("Error en el validador:", error);
+      return res.status(500).json({
+        error: "Error interno en la validación de datos",
+      });
+    }
    
     //  console.log(error.errors[0].message);
 
