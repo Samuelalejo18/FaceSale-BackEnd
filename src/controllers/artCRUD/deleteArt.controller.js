@@ -1,13 +1,11 @@
 /// Metodos http, para el manejo de usuarios
 // el metodo post sea realizo en auth controller
 
-const User = require("../../models/User.js");
+const Artwork = require("../../models/Artwork.js"); // Importar el modelo de la arte
 
-//get para obtener los datos del usuario
 
-//Delete: eliminar usuario por iD
 
-const deleteUser = async (req, res) => {
+const deleteArt = async (req, res) => {
   try {
     const { id } = req.params;
     const deleteUser = await User.findByIdAndDelete(id);
@@ -21,4 +19,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { deleteUser };
+module.exports = { deleteArt };

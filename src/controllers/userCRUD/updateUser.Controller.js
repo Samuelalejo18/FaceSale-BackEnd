@@ -1,7 +1,7 @@
 /// Metodos http, para el manejo de usuarios
 // el metodo post sea realizo en auth controller
 
-const User = require("../../models/user.js");
+const User = require("../../models/User.js");
 const bcrypt = require("bcrypt");
 //get para obtener los datos del us
 // PUT: Actualizar un usuario por ID

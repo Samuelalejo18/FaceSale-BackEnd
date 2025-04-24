@@ -16,8 +16,9 @@ const cors = require("cors");
 
 //conecta con las rutas
 
-const authRoutes = require("./routes/auth.routes");
-const userRoutes = require("./routes/user.routes");
+const authRoutes = require("./routes/user/auth.routes.js");
+const userRoutes = require("./routes/user/user.routes.js");
+const artworkRoutes = require("./routes/art/art.routes.js");
 
 //configuraciones de express
 // Habilita CORS (Cross-Origin Resource Sharing) para permitir
@@ -40,6 +41,7 @@ server.use(cookieParser());
 // Rutas
 server.use("/api", authRoutes);
 server.use("/api", userRoutes);
+server.use("/api", artworkRoutes);
 
 require("./db.js");
 module.exports = server;
