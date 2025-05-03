@@ -23,7 +23,7 @@ routerCrudUser.get("/getUserByID/:id", getUserByID);
 
 routerCrudUser.put(
   "/updateUser/:id",
-  validateSchema(registerSchema),
+ /* validateSchema(registerSchema),*/
   updateUser
 );
 

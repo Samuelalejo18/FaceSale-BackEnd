@@ -8,8 +8,9 @@
  * @param {Object} schema - Esquema de validación de Zod.
  * @returns {Function} Middleware de Express para validar la solicitud.
  */
+const validateSchema = (schema) => (req, res, next) => {
+  // Retorna una función middleware con los parámetros estándar req, res, next
 
-const validateSchema = (schema) => {
   try {
     // Intenta validar el cuerpo de la solicitud con el esquema proporcionado.
     schema.parse(req.body);
@@ -19,25 +20,21 @@ const validateSchema = (schema) => {
   } catch (error) {
     // Si la validación falla, captura el error y maneja la respuesta.
 
-    // Muestra en la consola el primer mensaje de error para facilitar la depuración.
-    if (error && Array.isArray(error.errors)) {
+    if (error && error.errors && Array.isArray(error.errors)) {
+      console.log(error.errors[0]?.message);
+
+      // Retorna una respuesta con código 400 (Bad Request) y un array con los mensajes de error
       return res.status(400).json({
         errors: error.errors.map((e) => e.message),
       });
     } else {
+      // Si el error no tiene la estructura esperada, maneja el caso como un error del servidor
       console.error("Error en el validador:", error);
       return res.status(500).json({
         error: "Error interno en la validación de datos",
       });
     }
-   
-    //  console.log(error.errors[0].message);
-
-     // Retorna una respuesta con código 400 (Bad Request) y un array con los mensajes de error.
-    //return res.status(400).json(error.errors.map((error) => error.message) );
   }
 };
 
-
-// Exporta la función para que pueda ser utilizada en otros archivos del proyecto.
 module.exports = { validateSchema };
