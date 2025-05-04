@@ -1,21 +1,16 @@
-/// Metodos http, para el manejo de usuarios
-// el metodo post sea realizo en auth controller
-
 const Artwork = require("../../models/Artwork.js"); // Importar el modelo de la arte
-
-
 
 const deleteArt = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteUser = await User.findByIdAndDelete(id);
-    if (!deleteUser) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+    const deleteArtwork = await Artwork.findByIdAndDelete(id);
+    if (!deleteArtwork) {
+      return res.status(404).json({ message: "obra de arte no encontrada" });
     }
 
-    res.status(200).json({ message: "Usuario eliminado correctamente" });
+    res.status(200).json({ message: "Obra de arte eliminada correctamente" });
   } catch (error) {
-    res.status(400).json({ message: "Error deleting user" });
+    res.status(400).json({ message: "Error deleting artWork" });
   }
 };
 

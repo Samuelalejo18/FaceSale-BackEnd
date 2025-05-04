@@ -8,7 +8,7 @@ const getArts = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error a traer los usuarios", error: error.message });
+      .json({ message: "Error a traer las obras de arte", error: error.message });
   }
 };
 
@@ -23,7 +23,7 @@ const getArtByID = async (req, res) => {
     res.json(artByID);
   } catch (error) {
     res.status(500).json({
-      message: "Error a traer  el usuario por ID",
+      message: "Error a traer la obra de arte por ID",
     });
   }
 };

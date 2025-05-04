@@ -1,6 +1,5 @@
 const user = require("../../models/User.js");
 
-const bcrypt = require("bcrypt");
 
 const createArt = async (req, res) => {
   const {
