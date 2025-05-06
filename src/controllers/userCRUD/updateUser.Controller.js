@@ -39,9 +39,8 @@ const updateUser = async (req, res) => {
     });
     const userFoundNumberPhone = await user.findOne({
       numberPhone,
-      _id: { $ne: req.params.id }
+      _id: { $ne: req.params.id },
     });
-
 
     if (userFoundEmail)
       return res.status(400).json({ message: "Email already exists" });
@@ -60,8 +59,6 @@ const updateUser = async (req, res) => {
     if (userFoundEmail) {
       return res.status(400).json({ message: "El correo ya está registrado" });
     }
-
-  
 
     // Encriptar la contraseña solo si se envió una nueva
     let updatedPassword = undefined;
