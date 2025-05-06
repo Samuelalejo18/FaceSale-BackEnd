@@ -18,7 +18,7 @@ const getAuctions = async (req, res) => {
 const getAuctionByID = async (req, res) => {
   try {
     const { id } = req.params;
-    const auctionByID = await AuctionByID.findById(id);
+    const auctionByID = await Auction.findById(id);
 
     if (!auctionByID) {
       return res.status(404).json({ message: "Subasta no encontrada" });
