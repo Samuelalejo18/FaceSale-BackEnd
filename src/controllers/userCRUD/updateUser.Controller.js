@@ -1,7 +1,7 @@
 /// Metodos http, para el manejo de usuarios
 // el metodo post sea realizo en auth controller
 
-const User = require("../../models/User.js");
+const User = require("../../models/User")
 const bcrypt = require("bcrypt");
 //get para obtener los datos del us
 // PUT: Actualizar un usuario por ID
@@ -29,15 +29,15 @@ const updateUser = async (req, res) => {
       email,
       _id: { $ne: req.params.id },
     });
-    const userFoundUserName = await user.findOne({
+    const userFoundUserName = await User.findOne({
       userName,
       _id: { $ne: req.params.id },
     });
-    const userFoundIdentityDocument = await user.findOne({
+    const userFoundIdentityDocument = await User.findOne({
       identityDocument,
       _id: { $ne: req.params.id },
     });
-    const userFoundNumberPhone = await user.findOne({
+    const userFoundNumberPhone = await User.findOne({
       numberPhone,
       _id: { $ne: req.params.id },
     });
