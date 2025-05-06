@@ -1,4 +1,4 @@
-const Artwork = require("../../models/Artwork"); // Importar el modelo de usuario
+const Artwork = require("../../models/Artwork"); // Importar el modelo de la obra de arte
 
 const getArts = async (req, res) => {
   try {

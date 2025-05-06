@@ -1,5 +1,4 @@
-const user = require("../../models/User.js");
-
+const Artwork= require("../../models/Artwork"); 
 
 const createArt = async (req, res) => {
   const {
@@ -27,7 +26,7 @@ const createArt = async (req, res) => {
         .json({ message: "La obra ya está registrada con ese título" });
     }
 
-    const newArt = new user({
+    const newArt = new Artwork ({
       title,
       category,
       artist,
