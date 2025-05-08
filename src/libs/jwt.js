@@ -23,7 +23,7 @@ function createAccessToken(payload) {
       payload, // Datos que se incluirán en el token
       SECRET, // Clave secreta para firmar el token
       {
-        expiresIn: 300, // expira en 5 MINUTOS
+        expiresIn: 500, // expira en 5 MINUTOS
       },
       (err, token) => {
         if (err) reject(err); // Si hay un error, rechazamos la promesa

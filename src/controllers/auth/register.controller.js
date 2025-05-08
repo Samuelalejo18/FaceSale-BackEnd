@@ -1,6 +1,6 @@
 const user = require("../../models/User.js")
 const bcrypt = require("bcrypt");
-
+const { createAccessToken } = require("../../libs/jwt.js");
 const register = async (req, res) => {
   const {
     name,
@@ -22,22 +22,22 @@ const register = async (req, res) => {
     const userFoundEmail = await user.findOne({ email });
     const userFoundUserName = await user.findOne({ userName });
     const userFoundIdentityDocument = await user.findOne({ identityDocument });
-    const userFoundNumberPhone = await user.findOne({numberPhone });
+    const userFoundNumberPhone = await user.findOne({ numberPhone });
 
     if (userFoundEmail)
       return res.status(400).json({ message: " ❌ El correo electrónico ya existe" });
-    
+
     if (userFoundUserName)
       return res.status(400).json({ message: " ❌ El nombre de usuario ya existe" });
-    
+
     if (userFoundIdentityDocument)
       return res
         .status(400)
         .json({ message: " ❌ El documento de identidad ya existe" });
-    
+
     if (userFoundNumberPhone)
       return res.status(400).json({ message: " ❌ El número de teléfono ya existe" });
-    
+
 
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -58,6 +58,8 @@ const register = async (req, res) => {
     });
 
     const userSaved = await newUser.save();
+    const token = await createAccessToken({ id: userSaved._id });
+    res.cookie("token", token);
 
     res.json({
       id: userSaved._id,

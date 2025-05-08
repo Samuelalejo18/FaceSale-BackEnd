@@ -38,19 +38,19 @@ const login = async (req, res) => {
     res.cookie("token", token);
 
     res.json({
-        id: userFoundEmail._id,
-        name: userFoundEmail.name,
-        lastName: userFoundEmail.lastName,
-        userName: userFoundEmail.userName,
-        identityDocument: userFoundEmail.identityDocument,
-        age: userFoundEmail.age,
-        email: userFoundEmail.email,
-        numberPhone: userFoundEmail.numberPhone,
-        country: userFoundEmail.country,
-        city: userFoundEmail.city,
-        address: userFoundEmail.address,
-        faceDescriptor: userFoundEmail.faceDescriptor,
-        faceImage: userFoundEmail.faceImage,
+      id: userFoundEmail._id,
+      name: userFoundEmail.name,
+      lastName: userFoundEmail.lastName,
+      userName: userFoundEmail.userName,
+      identityDocument: userFoundEmail.identityDocument,
+      age: userFoundEmail.age,
+      email: userFoundEmail.email,
+      numberPhone: userFoundEmail.numberPhone,
+      country: userFoundEmail.country,
+      city: userFoundEmail.city,
+      address: userFoundEmail.address,
+      faceDescriptor: userFoundEmail.faceDescriptor,
+      faceImage: userFoundEmail.faceImage,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -60,9 +60,19 @@ const login = async (req, res) => {
 //Deslogearse o cerrar el token
 
 const logout = (req, res) => {
-  res.cookie("token", "", { expires: new Date(0) });
-  return res.sendStatus(200);
+  // Limpia la cookie en el servidor
+  res.clearCookie('token', {
+    path: '/',
+    // si marcaste httpOnly/token secure, aquí debes repetir esas opciones
+  });
+
+  // Envía un JSON con tu mensaje
+  return res
+    .status(200)
+    .json({ message: 'Sesión cerrada correctamente' });
 };
+
+
 
 //mirar perfil
 
@@ -74,18 +84,18 @@ const profile = async (req, res) => {
 
   res.json({
     id: userFound._id,
-      name: userFound.name,
-      lastName: userFound.lastName,
-      userName: userFound.userName,
-      identityDocument: userFound.identityDocument,
-      age: userFound.age,
-      email: userFound.email,
-      numberPhone: userFound.numberPhone,
-      country: userFound.country,
-      city: userFound.city,
-      address: userFound.address,
-      faceDescriptor: userFound.faceDescriptor,
-      faceImage: userFound.faceImage,
+    name: userFound.name,
+    lastName: userFound.lastName,
+    userName: userFound.userName,
+    identityDocument: userFound.identityDocument,
+    age: userFound.age,
+    email: userFound.email,
+    numberPhone: userFound.numberPhone,
+    country: userFound.country,
+    city: userFound.city,
+    address: userFound.address,
+    faceDescriptor: userFound.faceDescriptor,
+    faceImage: userFound.faceImage,
   });
 };
 
@@ -99,19 +109,19 @@ const verifyToken = async (req, res) => {
     if (!userFound) return res.status(401).json({ message: "No autirizado" });
 
     res.json({
-        id: userFound._id,
-        name: userFound.name,
-        lastName: userFound.lastName,
-        userName: userFound.userName,
-        identityDocument: userFound.identityDocument,
-        age: userFound.age,
-        email: userFound.email,
-        numberPhone: userFound.numberPhone,
-        country: userFound.country,
-        city: userFound.city,
-        address: userFound.address,
-        faceDescriptor: userFound.faceDescriptor,
-        faceImage: userFound.faceImage,
+      id: userFound._id,
+      name: userFound.name,
+      lastName: userFound.lastName,
+      userName: userFound.userName,
+      identityDocument: userFound.identityDocument,
+      age: userFound.age,
+      email: userFound.email,
+      numberPhone: userFound.numberPhone,
+      country: userFound.country,
+      city: userFound.city,
+      address: userFound.address,
+      faceDescriptor: userFound.faceDescriptor,
+      faceImage: userFound.faceImage,
     });
   });
 };
