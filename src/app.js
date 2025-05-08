@@ -1,6 +1,8 @@
 const express = require("express");
 const server = express();
 
+
+
 // Configuracion del servidor
 
 //morgan para las peticiones
@@ -13,6 +15,16 @@ const cookieParser = require("cookie-parser");
 // para las peticiones  el body del fronted con el backend, por politicas cors
 
 const cors = require("cors");
+
+
+const path = require('path');
+
+
+server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+
+
 
 //conecta con las rutas
 
@@ -44,4 +56,4 @@ server.use("/api", userRoutes);
 server.use("/api", artworkRoutes);
 
 require("./db.js");
-module.exports = server;
+module.exports =  server;

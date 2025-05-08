@@ -1,6 +1,8 @@
-const Artwork= require("../../models/Artwork"); 
+const Artwork = require("../../models/Artwork");
+const fs = require("fs");
+const path = require("path");
 
-const createArt = async (req, res) => {
+const createArt = async (req, res, next) => {
   const {
     title,
     category,
@@ -9,7 +11,6 @@ const createArt = async (req, res) => {
     description,
     technique,
     dimensions,
-    images,
     startingPrice,
     status,
   } = req.body;
@@ -26,7 +27,29 @@ const createArt = async (req, res) => {
         .json({ message: "La obra ya está registrada con ese título" });
     }
 
-    const newArt = new Artwork ({
+    let imageData = null;
+    const file = req.file;
+    if (file) {
+      const imagePath = path.join(__dirname, "../../../uploads/artWorks", file.filename);
+
+      const img = fs.readFileSync(imagePath);
+      imageData = {
+        name: req.file.originalname,
+        image: {
+          data: img,
+          contentType: req.file.mimetype,
+        },
+      };
+    } else {
+
+      const error = new Error('No file');
+      error.httpStatusCode = 400;
+      return next(error);
+
+    }
+
+
+    const newArt = new Artwork({
       title,
       category,
       artist,
@@ -34,9 +57,9 @@ const createArt = async (req, res) => {
       description,
       technique,
       dimensions,
-      images,
       startingPrice,
       status,
+      images: imageData ? [imageData] : [],
     });
 
     const artSaved = await newArt.save();

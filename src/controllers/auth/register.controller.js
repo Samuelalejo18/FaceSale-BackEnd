@@ -1,6 +1,9 @@
 const user = require("../../models/User.js")
 const bcrypt = require("bcrypt");
 const { createAccessToken } = require("../../libs/jwt.js");
+
+
+
 const register = async (req, res) => {
   const {
     name,

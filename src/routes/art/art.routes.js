@@ -1,6 +1,8 @@
 const { Router } = require("express");
 
 const routerCrudArt = Router();
+
+
 const {
   getArts,
   getArtByID,
@@ -23,7 +25,28 @@ routerCrudArt.get("/getArts", getArts);
 routerCrudArt.get("/getArt/:id", getArtByID);
 
 // Crear una nueva obra de arte
-routerCrudArt.post("/createArt", createArt);
+
+// Configure multer for file uploads
+const multer = require("multer")
+const fs = require("fs");
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = "uploads/artWorks";
+    fs.mkdirSync(dir, { recursive: true }); // Asegura que el directorio exista
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+
+
+const upload = multer({ storage });
+
+routerCrudArt.post("/createArt", upload.single("file"), createArt);
 
 // Actualizar una obra de arte por ID
 

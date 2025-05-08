@@ -73,11 +73,18 @@ const ArtworkSchema = new mongoose.Schema(
       },
     },
 
-    // Arreglo de URLs de imágenes de la obra
+  
     images: [
       {
-        type: String, // URL de la imagen
-      },
+        name: {
+          type: String,
+          required: true
+        },
+        image: {
+          data: Buffer,
+          contentType: String
+        }
+      }
     ],
 
     // Precio inicial para comenzar la subasta

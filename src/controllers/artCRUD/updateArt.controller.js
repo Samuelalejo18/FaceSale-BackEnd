@@ -11,7 +11,6 @@ const updateArtwork = async (req, res) => {
       description,
       technique,
       dimensions,
-      images,
       startingPrice,
       status,
     } = req.body;

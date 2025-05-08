@@ -16,6 +16,14 @@ const {
   verifyToken,
 } = require("../../controllers/auth/login.controller.js");
 
+
+
+
+
+
+
+
+
 router.post("/register", validateSchema(registerSchema), register);
 
 router.post("/login", validateSchema(loginSchema), login);
