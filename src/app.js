@@ -25,7 +25,7 @@ const artworkRoutes = require("./routes/art/art.routes.js");
 // peticiones desde el frontend alojado en http://localhost:8000
 server.use(
   cors({
-    origin: "http://localhost:8000", // Solo permite solicitudes desde esta URL
+    origin: "http://localhost:4200", // Solo permite solicitudes desde esta URL
     credentials: true, // Permite el envío de cookies en las solicitudes
   })
 );

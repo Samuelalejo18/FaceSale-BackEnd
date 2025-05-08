@@ -25,18 +25,19 @@ const register = async (req, res) => {
     const userFoundNumberPhone = await user.findOne({numberPhone });
 
     if (userFoundEmail)
-      return res.status(400).json({ message: "Email already exists" });
-
+      return res.status(400).json({ message: " ❌ El correo electrónico ya existe" });
+    
     if (userFoundUserName)
-      return res.status(400).json({ message: "Username already exists" });
-
+      return res.status(400).json({ message: " ❌ El nombre de usuario ya existe" });
+    
     if (userFoundIdentityDocument)
       return res
         .status(400)
-        .json({ message: "Identity Document already exists" });
-
+        .json({ message: " ❌ El documento de identidad ya existe" });
+    
     if (userFoundNumberPhone)
-      return res.status(400).json({ message: "Phone Number already exists" });
+      return res.status(400).json({ message: " ❌ El número de teléfono ya existe" });
+    
 
     const passwordHash = await bcrypt.hash(password, 10);
 
