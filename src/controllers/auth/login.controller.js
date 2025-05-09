@@ -57,6 +57,39 @@ const login = async (req, res) => {
   }
 };
 
+const loginCredentials = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    //buscar si el correo existe
+
+    const userFoundEmail = await User.findOne({ email });
+    if (!userFoundEmail) {
+      return res.status(400).json({ message: "El correo no existe ❌" });
+    }
+
+    //Comparar la contraseña
+
+    const matchedPassword = await bcrypt.compare(
+      password,
+      userFoundEmail.password
+    );
+
+    if (!matchedPassword) {
+      return res.status(400).json({ message: "Contraseña incorrecta ❌" });
+    }
+
+
+    res.status(200).json({
+      message: "Credenciales correctas,  prosigue con el reconocimiento facial"
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
+
 //Deslogearse o cerrar el token
 
 const logout = (req, res) => {
@@ -126,4 +159,4 @@ const verifyToken = async (req, res) => {
   });
 };
 
-module.exports = { login, logout, profile, verifyToken };
+module.exports = { login, loginCredentials, logout, profile, verifyToken };

@@ -8,9 +8,10 @@ const {
   registerSchema,
   loginSchema,
 } = require("../../schema/userSchemaZod.js");
-const { register } = require("../../controllers/auth/register.controller.js");
+const { register, registerCredentials } = require("../../controllers/auth/register.controller.js");
 const {
   login,
+  loginCredentials,
   logout,
   profile,
   verifyToken,
@@ -40,7 +41,10 @@ const upload = multer({ storage });
 
 router.post("/register", upload.single("file"), validateSchema(registerSchema), register);
 
+router.post("/registerCredentials",  validateSchema(registerSchema), registerCredentials);
+
 router.post("/login", validateSchema(loginSchema), login);
+router.post("/loginCredentials", validateSchema(loginSchema), loginCredentials);
 
 router.post("/logout", logout);
 
