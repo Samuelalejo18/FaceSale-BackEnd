@@ -1,10 +1,12 @@
 const user = require("../../models/User.js")
 const bcrypt = require("bcrypt");
 const { createAccessToken } = require("../../libs/jwt.js");
+const fs = require("fs");
+const path = require("path");
 
 
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const {
     name,
     lastName,
@@ -18,7 +20,7 @@ const register = async (req, res) => {
     city,
     address,
     faceDescriptor,
-    faceImage,
+
   } = req.body;
 
   try {
@@ -44,6 +46,32 @@ const register = async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+
+
+    let imageData = null;
+    const file = req.file;
+    if (file) {
+      const imagePath = path.join(__dirname, "../../../uploads/userFace", file.filename);
+
+      const img = fs.readFileSync(imagePath);
+      imageData = {
+        name: req.file.originalname,
+        image: {
+          data: img,
+          contentType: req.file.mimetype,
+        },
+      };
+    } else {
+
+      const error = new Error('No file');
+      error.httpStatusCode = 400;
+      return next(error);
+
+    }
+
+
+
+
     const newUser = new user({
       name,
       lastName,
@@ -57,7 +85,7 @@ const register = async (req, res) => {
       city,
       address,
       faceDescriptor,
-      faceImage,
+      faceImage: imageData ? [imageData] : [],
     });
 
     const userSaved = await newUser.save();
@@ -65,19 +93,7 @@ const register = async (req, res) => {
     res.cookie("token", token);
 
     res.json({
-      id: userSaved._id,
-      name: userSaved.name,
-      lastName: userSaved.lastName,
-      userName: userSaved.userName,
-      identityDocument: userSaved.identityDocument,
-      age: userSaved.age,
-      email: userSaved.email,
-      numberPhone: userSaved.numberPhone,
-      country: userSaved.country,
-      city: userSaved.city,
-      address: userSaved.address,
-      faceDescriptor: userSaved.faceDescriptor,
-      faceImage: userSaved.faceImage,
+      userSaved
     });
   } catch (error) {
     console.log(error);

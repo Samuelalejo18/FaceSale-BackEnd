@@ -18,13 +18,27 @@ const {
 
 
 
+// Configure multer for file uploads
+const multer = require("multer")
+const fs = require("fs");
 
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = "uploads/userFace";
+    fs.mkdirSync(dir, { recursive: true }); // Asegura que el directorio exista
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
 
+const upload = multer({ storage });
 
 
-router.post("/register", validateSchema(registerSchema), register);
+router.post("/register", upload.single("file"), validateSchema(registerSchema), register);
 
 router.post("/login", validateSchema(loginSchema), login);
 

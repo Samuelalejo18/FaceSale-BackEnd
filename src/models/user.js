@@ -95,19 +95,21 @@ const userSchema = new mongoose.Schema({
    * @type {String}
    * @optional
    */
-  faceImage: [
-    {
-      name: {
-        type: String,
-        required: true
+  faceImage: {
+    type: [
+      {
+        name: {
+          type: String,
+          required: true
+        },
+        image: {
+          data: Buffer,
+          contentType: String
+        }
       },
-      image: {
-        data: Buffer,
-        contentType: String
-      }
-    },
-   
-  ],
+
+    ], required: false
+  },
 });
 
 const User = mongoose.model("User", userSchema);
