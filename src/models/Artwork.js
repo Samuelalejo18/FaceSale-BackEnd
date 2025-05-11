@@ -45,12 +45,14 @@ const ArtworkSchema = new mongoose.Schema(
     description: {
       type: String,
       trim: true,
+      required: true
     },
 
     // Técnica o medio utilizado (ej: óleo sobre lienzo, escultura, etc.)
     technique: {
       type: String,
       trim: true,
+      required: true
     },
 
     // Dimensiones de la obra en centímetros
@@ -73,7 +75,7 @@ const ArtworkSchema = new mongoose.Schema(
       },
     },
 
-  
+
     images: [
       {
         name: {
