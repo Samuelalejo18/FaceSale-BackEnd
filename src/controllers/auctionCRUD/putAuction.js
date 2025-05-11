@@ -37,3 +37,5 @@ const updateAuction = async(req, res) => {
         });
     }
 };
+
+module.exports = updateAuction;

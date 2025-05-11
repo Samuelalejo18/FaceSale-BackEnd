@@ -40,3 +40,5 @@ const createAuction = async (req, res) => {
         });
     }
 };
+
+module.exports = createAuction;
