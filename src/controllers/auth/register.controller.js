@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const { createAccessToken } = require("../../libs/jwt.js");
 const fs = require("fs");
 const path = require("path");
-
+const { reconocimientoFacial } = require("../reconocimientoFacial/reconocimientoFacial.js");
+// const { createAccessToken } = require("../../libs/jwt.js");
 
 
 const register = async (req, res, next) => {
@@ -24,10 +25,9 @@ const register = async (req, res, next) => {
   } = req.body;
 
   try {
-    
+
     const passwordHash = await bcrypt.hash(password, 10);
 
- descArray = JSON.parse(faceDescriptor); 
 
     let imageData = null;
     const file = req.file;
@@ -51,7 +51,43 @@ const register = async (req, res, next) => {
     }
 
 
-const floatDesc = new Float32Array(descArray);
+
+    // al inicio de register():
+    let rawDescriptor = faceDescriptor;
+    let descriptorArray;
+
+    // si viene como string JSON, lo parseamos:
+    if (typeof rawDescriptor === 'string') {
+      try {
+        descriptorArray = JSON.parse(rawDescriptor);
+      } catch (e) {
+        return res.status(400).json({ message: 'Descriptor facial inválido (no JSON)' });
+      }
+    } else {
+      descriptorArray = rawDescriptor;
+    }
+
+    // validamos:
+    if (!Array.isArray(descriptorArray) || !descriptorArray.every(n => typeof n === 'number')) {
+      return res
+        .status(400)
+        .json({ message: 'Descriptor facial inválido (no array de números)' });
+    }
+
+    // --- 2) Comprobar si ya hay un descriptor “demasiado cercano” en la BD ---
+    //    Aquí traemos sólo el campo faceDescriptor de cada usuario
+    const todos = await user.find({}, 'faceDescriptor');
+    for (let u of todos) {
+      const stored = u.faceDescriptor; // array guardado
+      const distance = reconocimientoFacial(descriptorArray, stored);
+      if (distance < 0.6) {
+        // si está muy cercano a uno existente, abortamos
+        return res
+          .status(400)
+          .json({ message: 'Registro fallido: rostro ya registrado' });
+      }
+    }
+
 
 
     const newUser = new user({
@@ -66,17 +102,16 @@ const floatDesc = new Float32Array(descArray);
       country,
       city,
       address,
-      faceDescriptor: floatDesc,
+      faceDescriptor: descriptorArray,
       faceImage: imageData ? [imageData] : [],
     });
 
+
     const userSaved = await newUser.save();
     const token = await createAccessToken({ id: userSaved._id });
-    res.cookie("token", token);
+    res.cookie("token", token, { httpOnly: true });
+    return res.json({ user: userSaved });
 
-    res.json({
-      userSaved
-    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

@@ -1,6 +1,6 @@
 const User = require("../../models/User.js");
 const bcrypt = require("bcrypt");
-
+const {reconocimientoFacial}=require("../reconocimientoFacial/reconocimientoFacial.js");
 //Importar token
 
 const { createAccessToken } = require("../../libs/jwt.js");
@@ -13,7 +13,7 @@ const { SECRET } = process.env;
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, descriptorFacial } = req.body;
 
     //buscar si el correo existe
 
@@ -33,29 +33,43 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Contraseña incorrecta ❌" });
     }
 
-    //Crear token y dovolver un token
-    const token = await createAccessToken({ id: userFoundEmail._id });
-    res.cookie("token", token);
+    const storedDescriptor = userFoundEmail.faceDescriptor; // ya guardado correctamente
+    // si quieres, validar storedDescriptor de forma análoga..
 
-    res.json({
-      id: userFoundEmail._id,
-      name: userFoundEmail.name,
-      lastName: userFoundEmail.lastName,
-      userName: userFoundEmail.userName,
-      identityDocument: userFoundEmail.identityDocument,
-      age: userFoundEmail.age,
-      email: userFoundEmail.email,
-      numberPhone: userFoundEmail.numberPhone,
-      country: userFoundEmail.country,
-      city: userFoundEmail.city,
-      address: userFoundEmail.address,
-      faceDescriptor: userFoundEmail.faceDescriptor,
-      faceImage: userFoundEmail.faceImage,
-    });
+    const distance = reconocimientoFacial(descriptorFacial, storedDescriptor);
+
+    if (distance < 0.6) {
+
+      //Crear token y dovolver un token
+      const token = await createAccessToken({ id: userFoundEmail._id });
+      res.cookie("token", token);
+
+      res.json({
+        id: userFoundEmail._id,
+        name: userFoundEmail.name,
+        lastName: userFoundEmail.lastName,
+        userName: userFoundEmail.userName,
+        identityDocument: userFoundEmail.identityDocument,
+        age: userFoundEmail.age,
+        email: userFoundEmail.email,
+        numberPhone: userFoundEmail.numberPhone,
+        country: userFoundEmail.country,
+        city: userFoundEmail.city,
+        address: userFoundEmail.address,
+        faceDescriptor: userFoundEmail.faceDescriptor,
+        faceImage: userFoundEmail.faceImage,
+      });
+    } else {
+      return res.status(401).json({ message: 'Reconocimiento facial fallido, no coincide el rostro' });
+    }
+
+
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
 
 const loginCredentials = async (req, res) => {
   try {
@@ -81,7 +95,20 @@ const loginCredentials = async (req, res) => {
 
 
     res.status(200).json({
-      message: "Credenciales correctas,  prosigue con el reconocimiento facial"
+      message: "Credenciales correctas,  prosigue con el reconocimiento facial",
+      id: userFoundEmail._id,
+      name: userFoundEmail.name,
+      lastName: userFoundEmail.lastName,
+      userName: userFoundEmail.userName,
+      identityDocument: userFoundEmail.identityDocument,
+      age: userFoundEmail.age,
+      email: userFoundEmail.email,
+      numberPhone: userFoundEmail.numberPhone,
+      country: userFoundEmail.country,
+      city: userFoundEmail.city,
+      address: userFoundEmail.address,
+      faceDescriptor: userFoundEmail.faceDescriptor,
+      faceImage: userFoundEmail.faceImage,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
