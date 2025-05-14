@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-router.post("/register", upload.single("file"), validateSchema(registerSchema), register);
+router.post("/register", upload.single("faceImage"), register);
 
 router.post("/registerCredentials",  validateSchema(registerSchema), registerCredentials);
 

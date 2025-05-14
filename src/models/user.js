@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { object } = require("zod");
 
 const userSchema = new mongoose.Schema({
   /**
@@ -88,7 +89,7 @@ const userSchema = new mongoose.Schema({
    * @type {Array<Number>}
    * @optional
    */
-  faceDescriptor: { type: [Number], required: false },
+  faceDescriptor: { type: mongoose.Schema.Types.Mixed, required: false },
 
   /**
    * Imagen del rostro del usuario, almacenada en Base64 o como URL.

@@ -36,12 +36,12 @@ const registerSchema = z.object({
   country: z.string().min(1, "El país es obligatorio"),
   city: z.string().min(1, "La ciudad es obligatoria"),
   address: z.string().min(1, "La dirección es obligatoria"),
-
+/*
   faceDescriptor: z
     .array(z.number())
     .optional(),
 
-  faceImage: z.string().optional(), // Campo opcional
+  faceImage: z.string().optional(), */// Campo opcional
 });
 
 // Schema de login

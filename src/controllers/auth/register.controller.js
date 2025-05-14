@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
     
     const passwordHash = await bcrypt.hash(password, 10);
 
-
+ descArray = JSON.parse(faceDescriptor); 
 
     let imageData = null;
     const file = req.file;
@@ -51,6 +51,7 @@ const register = async (req, res, next) => {
     }
 
 
+const floatDesc = new Float32Array(descArray);
 
 
     const newUser = new user({
@@ -65,7 +66,7 @@ const register = async (req, res, next) => {
       country,
       city,
       address,
-      faceDescriptor,
+      faceDescriptor: floatDesc,
       faceImage: imageData ? [imageData] : [],
     });
 

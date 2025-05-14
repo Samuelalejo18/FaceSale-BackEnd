@@ -45,9 +45,9 @@ server.use(
 // Configura Morgan para registrar las solicitudes HTTP en la consola en formato 'dev'
 server.use(morgan("dev"));
 // Habilita el manejo de datos en formato URL codificado en las solicitudes (form-data)
-server.use(express.urlencoded({ extended: true }));
+server.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Habilita la interpretación de solicitudes con datos en formato JSON
-server.use(express.json());
+server.use(express.json({ limit: '50mb' }));;
 // Habilita el manejo de cookies en las solicitudes HTTP
 server.use(cookieParser());
 
