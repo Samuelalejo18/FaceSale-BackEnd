@@ -31,7 +31,7 @@ server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const authRoutes = require("./routes/user/auth.routes.js");
 const userRoutes = require("./routes/user/user.routes.js");
 const artworkRoutes = require("./routes/art/art.routes.js");
-const auctionRoutes = requires("./routes/auctions.routes.js");
+const auctionRoutes = require("./routes/auction/auction.routes.js");
 
 //configuraciones de express
 // Habilita CORS (Cross-Origin Resource Sharing) para permitir

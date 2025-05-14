@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const router = Router();
+const auctionRoutes = Router();
 
 // Import middleware
 const authRequired = require("../../middlewares/validateToken.js");
@@ -18,12 +18,12 @@ const { updateAuction } = require("../../controllers/auctionCRUD/putAuction.js")
 
 // /api/auctions
 // Obtiene todas las subastas disponibles
-router.get("/", getAuctions);
+auctionRoutes.get("/", getAuctions);
 
 // /api/auctions/:id
 // Ejemplo: /api/auctions/6523ab4c8b32a1b4567890cd
 // Obtiene una subasta específica por su ID
-router.get("/:id", getAuctionByID);
+auctionRoutes.get("/:id", getAuctionByID);
 
 // ---------------------------------------------------------------------------------
 // POST ROUTES
@@ -32,7 +32,7 @@ router.get("/:id", getAuctionByID);
 // /api/auctions
 // Crea una nueva subasta - Requiere autenticación
 // Body: { artworkId, startDate, endDate, status }
-router.post("/", authRequired, createAuction);
+auctionRoutes.post("/", authRequired, createAuction);
 
 // ---------------------------------------------------------------------------------
 // PUT ROUTES
@@ -42,18 +42,18 @@ router.post("/", authRequired, createAuction);
 // Ejemplo: /api/auctions/6523ab4c8b32a1b4567890cd
 // Actualiza una subasta existente - Requiere autenticación
 // Body: { artworkId?, startDate?, endDate?, status?, participants?, winner? }
-router.put("/:id", authRequired, updateAuction);
+auctionRoutes.put("/:id", authRequired, updateAuction);
 
 // /api/auctions/:id/bid
 // Ejemplo: /api/auctions/6523ab4c8b32a1b4567890cd/bid
 // Añade una nueva puja a la subasta - Requiere autenticación
 // Body: {userId, bidAmount}
-router.put("/:id/bid", authRequired, addBid);
+auctionRoutes.put("/:id/bid", authRequired, addBid);
 
 // /api/auctions/:id/finalize
 // Ejemplo: /api/auctions/6523ab4c8b32a1b4567890cd/finalize
 // Finaliza una subasta y determina el ganador - Requiere autenticación
-router.put("/:id/finalize", authRequired, finalizeAuction);
+auctionRoutes.put("/:id/finalize", authRequired, finalizeAuction);
 
 // ---------------------------------------------------------------------------------
 // DELETE ROUTES
@@ -62,8 +62,8 @@ router.put("/:id/finalize", authRequired, finalizeAuction);
 // /api/auctions/:id
 // Ejemplo: /api/auctions/6523ab4c8b32a1b4567890cd
 // Elimina una subasta por su ID - Requiere autenticación
-router.delete("/:id", authRequired, deleteAuction);
+auctionRoutes.delete("/:id", authRequired, deleteAuction);
 
-module.exports = router;
+module.exports = auctionRoutes;
 
 

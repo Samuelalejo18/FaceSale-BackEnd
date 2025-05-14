@@ -6,21 +6,21 @@ const addBid = async (req, res) => {
         const { userId, bidAmount } = req.body;
 
 
-        if(!userId || !bidAmount) {
+        if (!userId || !bidAmount) {
             return res.status(400).json({ message: "Se require usuario y monto de puja" });
         }
 
         const auction = await Auction.findById(id);
 
-        if(!auction) {
+        if (!auction) {
             return res.status(404).json({ message: "Subasta no encontrada" });
         }
 
-        if(auction.status !== "active") {
+        if (auction.status !== "active") {
             return res.status(400).json({ message: "La subasta no esta activa" });
         }
 
-        if(new Date() > new Date(auction.endDate)) {
+        if (new Date() > new Date(auction.endDate)) {
             return res.status(400).json({ message: "La subasta no ha finalizado" });
         }
 
@@ -29,7 +29,7 @@ const addBid = async (req, res) => {
             : 0;
 
 
-        if(bidAmount <= highestBid) {
+        if (bidAmount <= highestBid) {
             return res.status(400).json({
                 message: "La puja debe ser mayor que la puja mas alta actual",
                 currentHighest: highestBid
@@ -37,7 +37,7 @@ const addBid = async (req, res) => {
         }
 
         auction.participants.push({
-            userId, 
+            userId,
             bidAmount,
             bidTime: new Date()
         });
@@ -54,3 +54,5 @@ const addBid = async (req, res) => {
         });
     }
 };
+
+module.exports = { addBid };

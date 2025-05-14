@@ -1,6 +1,6 @@
 const Auction = require("../../models/Auction");
 
-const finalizeAuction = async(req, res) => {
+const finalizeAuction = async (req, res) => {
 
     try {
         const { id } = req.params;
@@ -9,16 +9,16 @@ const finalizeAuction = async(req, res) => {
         const auction = await Auction.findById(id);
 
 
-        if(!auction) {
+        if (!auction) {
             return res.status(404).json({ message: "Subasta no encontrada" });
         }
 
-        if(auction.status === "finished") {
-            return res.status(400).json({ message: "La subasta ya esta finalizada"});
+        if (auction.status === "finished") {
+            return res.status(400).json({ message: "La subasta ya esta finalizada" });
         }
 
         // Determine winner (highest bidder)
-        if(auction.participants.length > 0) {
+        if (auction.participants.length > 0) {
             // Sort participants by bid amount (descending)
             const sortedParticipants = [...auction.participants].sort((a, b) => b.bidAmount - a.bidAmount);
             auction.winner = sortedParticipants[0].userId;
@@ -41,4 +41,4 @@ const finalizeAuction = async(req, res) => {
 };
 
 
-module.exports = finalizeAuction
+module.exports = { finalizeAuction };

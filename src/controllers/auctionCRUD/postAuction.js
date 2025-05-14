@@ -19,7 +19,7 @@ const createAuction = async (req, res) => {
         }
 
 
-        const newAuction = new Auction({
+        const newAuction = new auction({
             artworkId,
             startDate, 
             endDate, 
@@ -41,4 +41,4 @@ const createAuction = async (req, res) => {
     }
 };
 
-module.exports = createAuction;
+module.exports = {createAuction};
