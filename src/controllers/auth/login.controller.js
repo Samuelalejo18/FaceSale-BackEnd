@@ -1,6 +1,6 @@
 const User = require("../../models/User.js");
 const bcrypt = require("bcrypt");
-const {reconocimientoFacial}=require("../reconocimientoFacial/reconocimientoFacial.js");
+const { reconocimientoFacial } = require("../reconocimientoFacial/reconocimientoFacial.js");
 //Importar token
 
 const { createAccessToken } = require("../../libs/jwt.js");
