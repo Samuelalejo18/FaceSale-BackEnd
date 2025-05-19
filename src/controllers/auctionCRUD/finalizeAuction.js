@@ -30,7 +30,7 @@ const finalizeAuction = async (req, res) => {
 
         const finalizedAuction = await auction.save();
 
-        res.status(200).json(finalizeAuction);
+        res.status(200).json({ message: " Subasta finalizada", auction: finalizedAuction });
     } catch (error) {
         console.error("Error finalizing auction: ", error);
         res.status(400).json({

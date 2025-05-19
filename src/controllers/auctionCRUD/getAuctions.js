@@ -31,4 +31,23 @@ const getAuctionByID = async (req, res) => {
   }
 };
 
-module.exports = { getAuctions, getAuctionByID };
+
+//get para obtener los datos de la subasta por id
+const getAuctionByIDArt = async (req, res) => {
+  try {
+    const { artworkId } = req.params;
+
+    const auctionByID = await Auction.findOne({ artworkId });
+
+    if (!auctionByID) {
+      return res.status(404).json({ message: "Subasta no encontrada" });
+    }
+    res.json(auctionByID);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error a traer  la subasta por ID",
+    });
+  }
+};
+
+module.exports = { getAuctions, getAuctionByID, getAuctionByIDArt };
