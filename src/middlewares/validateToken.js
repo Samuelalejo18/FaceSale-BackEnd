@@ -21,7 +21,7 @@ const authREquired = async (req, res, next) => {
   try {
     // Extraemos el token de las cookies del cliente
     const { token } = req.cookies;
-
+   
     // Si no hay token, se deniega el acceso con un estado 401 (No autorizado)
     if (!token) {
       return res
