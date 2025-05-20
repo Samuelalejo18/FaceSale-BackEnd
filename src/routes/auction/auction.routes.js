@@ -26,7 +26,7 @@ auctionRoutes.get("/getAuctions", authRequired, getAuctions);
 auctionRoutes.get("/getAuctionByID/:id", authRequired, getAuctionByID);
 
 
-auctionRoutes.get("/getAuctionByIDArt/:artworkId", authRequired, getAuctionByIDArt);
+auctionRoutes.get("/getAuctionByIDArt/:artworkId", getAuctionByIDArt);
 
 
 // ---------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ auctionRoutes.put("/Auction/:id/finalize", authRequired, finalizeAuction);
 // /api/auctions/:id
 // Ejemplo: /api/auctions/6523ab4c8b32a1b4567890cd
 // Elimina una subasta por su ID - Requiere autenticación
-auctionRoutes.delete("/deleteAuction/:id", deleteAuction);
+auctionRoutes.delete("/deleteAuction/:id", authRequired, deleteAuction);
 
 module.exports = auctionRoutes;
 

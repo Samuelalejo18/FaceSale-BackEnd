@@ -2,8 +2,8 @@ const { Router } = require("express");
 
 const routerCrudUser = Router();
 const { validateSchema } = require("../../middlewares/validator.middleware.js");
-const { registerSchema } = require("../../schema/userSchemaZod.js");
-
+const { updateSchema } = require("../../schema/userSchemaZod.js");
+const authRequired = require("../../middlewares/validateToken.js")
 const {
   getUsers,
   getUserByID,
@@ -23,10 +23,11 @@ routerCrudUser.get("/getUserByID/:id", getUserByID);
 
 routerCrudUser.put(
   "/updateUser/:id",
- /* validateSchema(registerSchema),*/
+  authRequired,
+  validateSchema(updateSchema),
   updateUser
 );
 
-routerCrudUser.delete("/deleteUser/:id", deleteUser);
+routerCrudUser.delete("/deleteUser/:id", authRequired, deleteUser);
 
 module.exports = routerCrudUser;

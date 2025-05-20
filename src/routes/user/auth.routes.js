@@ -18,6 +18,7 @@ const {
 } = require("../../controllers/auth/login.controller.js");
 
 
+const { reconocimientoFacialController } = require("../../controllers/reconocimientoFacial/reconocimientoFacial.controller.js")
 
 // Configure multer for file uploads
 const multer = require("multer")
@@ -41,10 +42,12 @@ const upload = multer({ storage });
 
 router.post("/register", upload.single("faceImage"), register);
 
-router.post("/registerCredentials",  validateSchema(registerSchema), registerCredentials);
+router.post("/registerCredentials", validateSchema(registerSchema), registerCredentials);
 
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/loginCredentials", validateSchema(loginSchema), loginCredentials);
+
+router.post("/reconocimientoFacial", reconocimientoFacialController);
 
 router.post("/logout", logout);
 
