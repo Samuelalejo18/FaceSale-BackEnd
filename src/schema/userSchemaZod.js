@@ -63,22 +63,21 @@ const loginSchema = z.object({
 
 
 const updateSchema = z.object({
-  name: z.string().min(1, "El nombre es obligatorio").optional(),
-  lastName: z.string().min(1, "El apellido es obligatorio").optional(),
+  name: z.string().optional(),
+  lastName: z.string().optional(),
 
   userName: z
     .string()
-    .min(3, "El nombre de usuario debe tener al menos 3 caracteres")
     .optional(),
 
   email: z
     .string()
-    .nonempty("El correo electrónico es obligatorio")
+
     .email("Correo electrónico no válido")
     .optional(),
   identityDocument: z
     .number()
-    .positive("El documento debe ser un número positivo").optional(),
+    .optional(),
 
   age: z
     .number()
@@ -95,11 +94,10 @@ const updateSchema = z.object({
     .max(14, "La contraseña no puede ser mayor a 14 caracteres")
     .optional(),
 
-  country: z.string().min(1, "El país es obligatorio").optional(),
-  city: z.string().min(1, "La ciudad es obligatoria").optional(),
-  address: z.string().min(1, "La dirección es obligatoria").optional(),
+  country: z.string().optional(),
+  city: z.string().optional(),
+  address: z.string().optional(),
+
 });
-
-
 
 module.exports = { registerSchema, loginSchema, updateSchema };

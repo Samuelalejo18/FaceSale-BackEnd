@@ -24,7 +24,6 @@ routerCrudUser.get("/getUserByID/:id", getUserByID);
 routerCrudUser.put(
   "/updateUser/:id",
   authRequired,
-  validateSchema(updateSchema),
   updateUser
 );
 
